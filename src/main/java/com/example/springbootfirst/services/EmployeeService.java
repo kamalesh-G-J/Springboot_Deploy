@@ -80,7 +80,7 @@ public class EmployeeService {
     }
 
     public String deleteEmployeeById(int empID){
-        rolesRepository.deleteByUserId(empID);
+
         registerDetailRepository.deleteById(empID);
         return "Employee Deleted Successfully";
     }
