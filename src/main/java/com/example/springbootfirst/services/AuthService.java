@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -71,19 +72,17 @@ public class AuthService {
 //        return "Login Not Successfully";
 //    }
 
-    public jwtResponse authenticate(RegisterDetails login){
+    public jwtResponse authenticate(RegisterDetails login) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        login.getUserName(),login.getPassword()));
-
+                new UsernamePasswordAuthenticationToken(login.getUserName(), login.getPassword())
+        );
         String token = jwtTokenProvider.generateToken(authentication);
-
-        String role = authentication.getAuthorities().stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("UNKNOWN");
-
-        return new jwtResponse(token, login.getUserName(), role);
+        String username = login.getUserName();
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(role -> role.getAuthority())
+                .collect(Collectors.toList());
+        String joinedRoles = String.join(",", roles);
+        return new jwtResponse(token, username, joinedRoles);
     }
 
     public Optional<RegisterDetails>  getUserByUserName(String username){

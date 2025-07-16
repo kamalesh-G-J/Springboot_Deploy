@@ -26,7 +26,7 @@ public class RegisterDetails {
     @Column(name = "User_Name",nullable = false,unique = true)
     private String userName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "user_roles",joinColumns =
     @JoinColumn(name = "user_id",referencedColumnName = "empID"),
             inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "roleID")
