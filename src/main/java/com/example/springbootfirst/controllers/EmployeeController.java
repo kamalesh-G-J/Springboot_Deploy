@@ -63,6 +63,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/del/{empID}")
     public String deleteEmployee(@PathVariable int empID){
+
         return employeeService.deleteEmployeeById(empID);
     }
 

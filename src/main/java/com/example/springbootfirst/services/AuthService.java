@@ -4,6 +4,7 @@ import com.example.springbootfirst.jwt.JwtTokenProvider;
 import com.example.springbootfirst.models.RegisterDetails;
 import com.example.springbootfirst.models.Roles;
 import com.example.springbootfirst.models.UserDetailsDto;
+import com.example.springbootfirst.models.jwtResponse;
 import com.example.springbootfirst.repository.RegisterDetailRepository;
 import com.example.springbootfirst.repository.RegisterRepository;
 import com.example.springbootfirst.repository.RolesRepository;
@@ -11,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AuthService {
@@ -72,12 +71,19 @@ public class AuthService {
 //        return "Login Not Successfully";
 //    }
 
-    public String authenticate(RegisterDetails login){
+    public jwtResponse authenticate(RegisterDetails login){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         login.getUserName(),login.getPassword()));
 
-        return jwtTokenProvider.generateToken(authentication);
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        String role = authentication.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("UNKNOWN");
+
+        return new jwtResponse(token, login.getUserName(), role);
     }
 
     public Optional<RegisterDetails>  getUserByUserName(String username){

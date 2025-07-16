@@ -1,6 +1,7 @@
 package com.example.springbootfirst.controllers;
 
 import com.example.springbootfirst.models.RegisterDetails;
+import com.example.springbootfirst.models.UserDetailsDto;
 import com.example.springbootfirst.services.EmployeeService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,40 @@ class EmployeeControllerTest {
        when(employeeService.getMethod()).thenReturn(Arrays.asList(emp1,emp2));
        List<RegisterDetails> result = employeeController.getMethod();
        assertEquals(2,result.size());
+   }
 
+   @Test
+   void testgetEmployeeById(){
+       int empid = 1;
+       RegisterDetails emp1 = new RegisterDetails();
+       emp1.setEmpID(empid);
+       when(employeeService.getEmployeeById(empid)).thenReturn(emp1);
+       RegisterDetails result = employeeController.getEmployeeById(empid);
+       assertEquals(empid,result.getEmpID());
+   }
+
+   @Test
+   void testaddnewEmployee(){
+       UserDetailsDto user = new UserDetailsDto();
+       user.setName("Yugesh");
+       user.setEmail("Yugesh@email.com");
+       user.setPassword("yugesh@2005");
+       String expectedMessage = "Employee added successfully";
+       when(employeeService.addNewEmployee(user)).thenReturn(expectedMessage);
+       String result = employeeController.addnewEmployee(user);
+       assertEquals(expectedMessage, result);
+   }
+
+   @Test
+   void testupdateEmployee(){
+       int empId = 1;
+       UserDetailsDto user = new UserDetailsDto();
+       user.setName("Yugesh");
+       user.setEmail("Yugesh@email.com");
+       String expectedMessage = "Employee updated successfully";
+       when(employeeService.updateEmployee(empId, user)).thenReturn(expectedMessage);
+       String result = employeeController.updateEmployee(empId, user);
+       assertEquals(expectedMessage, result);
    }
 
 }
