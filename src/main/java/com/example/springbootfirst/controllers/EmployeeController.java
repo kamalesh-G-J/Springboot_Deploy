@@ -29,8 +29,9 @@ public class EmployeeController {
         return "Welcome to SpringBoot Security";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/get")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<RegisterDetails> getMethod(){
 
         return employeeService.getMethod();
