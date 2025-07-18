@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TodoRepository extends JpaRepository<Todo,Integer> {
+public interface TodoRepository extends JpaRepository<Todo,String> {
     List<Todo> findByEmployeeEmpID(int empID);
 }

@@ -29,8 +29,7 @@ public class TodoServices {
     }
 
     public List<Todo> getTodoByEmployee(int empID) {
+
         return todoRepository.findByEmployeeEmpID(empID);
     }
-
-
 }
